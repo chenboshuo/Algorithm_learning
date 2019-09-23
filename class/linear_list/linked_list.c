@@ -29,8 +29,8 @@ linked_list *init() {
 linked_list *creat_char_list(linked_list *head) {
   linked_list *tail = head, *p;
   type x;
-  x = getchar();
-  while (x != '$') {
+  head -> data = 'h';
+  while ((x = getchar()) && x != '$') {
     p = (linked_list *)malloc(sizeof(linked_list));
     p->data = x;
     p->next = NULL;
@@ -44,13 +44,14 @@ linked_list *creat_char_list(linked_list *head) {
 /**
  * 在当前位置之后插入节点
  * @param  p 当前节点位置
+ * @param  data 加入的数据
  * @return   插入后节点的位置
  */
 linked_list* insert(linked_list* p, type data){
   linked_list*q = (linked_list*)malloc(sizeof(linked_list));
+  q -> data = data;
   q -> next = p -> next;
   p -> next = q;
-  q -> data = data;
   return q;
 }
 
@@ -60,9 +61,10 @@ linked_list* insert(linked_list* p, type data){
  */
 void print(linked_list* list) {
   while (list) {
-  printf("%c\n", list->data);
+  printf("%c ", list->data);
   list = list->next;
   }
+  printf("\n");
 }
 
 /**
@@ -77,8 +79,11 @@ void delete_next(linked_list* p) {
 
 // TODO: 删除当前节点
 
-
-void *reverse(linked_list*head){
+/**
+ * 反转链表
+ * @param  head 链表的头结点地址
+ */
+void reverse(linked_list*head){
   linked_list* pre=NULL, *cur = head->next, *next;
   while (cur) {
     next = cur -> next;
@@ -86,16 +91,44 @@ void *reverse(linked_list*head){
     pre = cur;
     cur = next;
   }
+  // pre -> next = NULL; // 最后的节点无后继
   head ->next = pre;
 }
 
 // 测试函数
 int main(int argc, char const *argv[]) {
+  // 测试初始化函数
   linked_list *head = init();
   creat_char_list(head);
+  printf("After init:\n");
   print(head);
-  // insert(head->next,"n");
+
+  // 测试插入函数
+  insert(head,'5');
+  printf("\nAfter insert:\n");
+  print(head);
+
+  // 测试删除函数
+  delete_next(head);
+  printf("\nAfter delete\n");
+  print(head);
+
+  // 测试反转函数
   reverse(head);
+  printf("\nAfter reverse\n");
   print(head);
+
   return 0;
 }
+// a b c $
+// After init:
+// h a b c
+//
+// After insert:
+// h 5 a b c
+//
+// After delete
+// h a b c
+//
+// After reverse
+// h c b a
