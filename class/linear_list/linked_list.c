@@ -72,7 +72,7 @@ void print(linked_list* list) {
 void delete_next(linked_list* p) {
   linked_list*q = p->next;
   p ->next = q -> next;
-  free(p);
+  free(q);
 }
 
 // TODO: 删除当前节点
