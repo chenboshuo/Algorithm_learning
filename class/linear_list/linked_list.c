@@ -77,13 +77,41 @@ void delete_next(linked_list* p) {
   free(q);
 }
 
-// TODO: 删除当前节点
+/**
+ * 按照数值查找节点 /          地址运算(只能向右)
+ * @param  loc 头结点的位置 /  当前节点位置
+ * @param  i   索引(head为0)/  与loc的相对位置
+ * @return     要查找的指针地址
+ */
+linked_list* iloc(linked_list* loc, size_t i){
+  while (i--) {
+    if (!loc -> next) {
+      return NULL;
+    }
+    loc = loc -> next;
+  }
+  return loc;
+}
+
+
+/**
+ * 求表长
+ * @param  head 头结点位置
+ * @return      长度
+ */
+size_t len(linked_list* head){
+  size_t len;
+  for(len = 0; head->next;head = head->next){
+    ++len;
+  }
+  return len;
+}
 
 /**
  * 反转链表
  * @param  head 链表的头结点地址
  */
-void reverse(linked_list*head){
+void reverse(linked_list *head){
   linked_list* pre=NULL, *cur = head->next, *next;
   while (cur) {
     next = cur -> next;
@@ -95,6 +123,30 @@ void reverse(linked_list*head){
   head ->next = pre;
 }
 
+/**
+ * 判断空链表
+ * @param  head 头结点位置
+ * @return      空为 1, 否则为 0.
+ */
+int is_empty(linked_list* head){
+  return (head->next)? 0:1;
+}
+
+/**
+ * 按值查找
+ * @param  loc  查找的开始位置
+ * @param  data 要查找的数据
+ * @return      找到的节点
+ */
+linked_list* search(linked_list* loc,type data){
+  while (loc->data != data) {
+    if((loc = loc -> next)==NULL){
+      return NULL;
+    };
+  }
+  return loc;
+}
+
 // 测试函数
 int main(int argc, char const *argv[]) {
   // 测试初始化函数
@@ -102,6 +154,19 @@ int main(int argc, char const *argv[]) {
   creat_char_list(head);
   printf("After init:\n");
   print(head);
+
+  // 测试查找函数
+  linked_list *find = iloc(head, 1);
+  printf("\nfind head[1]\n");
+  printf("%c\n", find->data);
+
+  // 测试表长
+  printf("\nThe length of linked list is %d\n", len(head));
+
+  // 测试查找
+  char to_search = 'a';
+  printf("%c\n", search(head,to_search)->data);
+
 
   // 测试插入函数
   insert(head,'5');
@@ -118,17 +183,32 @@ int main(int argc, char const *argv[]) {
   printf("\nAfter reverse\n");
   print(head);
 
+  // 测试空链表
+  linked_list *empty = init();
+  if (is_empty(empty)) {
+    printf("\ninit a empty list\n");
+  }
+
   return 0;
 }
-// a b c $
+// 1 2 3 a
+// $
 // After init:
-// h a b c
+// h 1 2 3 a
+//
+// find head[1]
+// 1
+//
+// The length of linked list is 4
+// a
 //
 // After insert:
-// h 5 a b c
+// h 5 1 2 3 a
 //
 // After delete
-// h a b c
+// h 1 2 3 a
 //
 // After reverse
-// h c b a
+// h a 3 2 1
+//
+// init a empty list
