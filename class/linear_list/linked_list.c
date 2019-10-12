@@ -29,7 +29,7 @@ linked_list *init() {
 linked_list *creat_char_list(linked_list *head) {
   linked_list *tail = head, *p;
   type x;
-  head -> data = 'h';
+  head->data = 'h';
   while ((x = getchar()) && x != '$') {
     p = (linked_list *)malloc(sizeof(linked_list));
     p->data = x;
@@ -47,11 +47,11 @@ linked_list *creat_char_list(linked_list *head) {
  * @param  data 加入的数据
  * @return   插入后节点的位置
  */
-linked_list* insert(linked_list* p, type data){
-  linked_list*q = (linked_list*)malloc(sizeof(linked_list));
-  q -> data = data;
-  q -> next = p -> next;
-  p -> next = q;
+linked_list *insert(linked_list *p, type data) {
+  linked_list *q = (linked_list *)malloc(sizeof(linked_list));
+  q->data = data;
+  q->next = p->next;
+  p->next = q;
   return q;
 }
 
@@ -59,10 +59,10 @@ linked_list* insert(linked_list* p, type data){
  * 打印链表的所有值
  * @param list 链表头结点地址
  */
-void print(linked_list* list) {
+void print(linked_list *list) {
   while (list) {
-  printf("%c ", list->data);
-  list = list->next;
+    printf("%c ", list->data);
+    list = list->next;
   }
   printf("\n");
 }
@@ -71,9 +71,9 @@ void print(linked_list* list) {
  * 删除下一个节点
  * @param p 当前节点的地址
  */
-void delete_next(linked_list* p) {
-  linked_list*q = p->next;
-  p ->next = q -> next;
+void delete_next(linked_list *p) {
+  linked_list *q = p->next;
+  p->next = q->next;
   free(q);
 }
 
@@ -83,27 +83,22 @@ void delete_next(linked_list* p) {
  * @param  i   索引(head为0)/  与loc的相对位置
  * @return     要查找的指针地址
  */
-linked_list* iloc(linked_list* loc, size_t i){
+linked_list *iloc(linked_list *loc, size_t i) {
   while (i--) {
-    if (!loc -> next) {
-      return NULL;
-    }
-    loc = loc -> next;
+    if (!loc->next) { return NULL; }
+    loc = loc->next;
   }
   return loc;
 }
-
 
 /**
  * 求表长
  * @param  head 头结点位置
  * @return      长度
  */
-size_t len(linked_list* head){
+size_t len(linked_list *head) {
   size_t len;
-  for(len = 0; head->next;head = head->next){
-    ++len;
-  }
+  for (len = 0; head->next; head = head->next) { ++len; }
   return len;
 }
 
@@ -111,16 +106,16 @@ size_t len(linked_list* head){
  * 反转链表
  * @param  head 链表的头结点地址
  */
-void reverse(linked_list *head){
-  linked_list* pre=NULL, *cur = head->next, *next;
+void reverse(linked_list *head) {
+  linked_list *pre = NULL, *cur = head->next, *next;
   while (cur) {
-    next = cur -> next;
-    cur -> next = pre;
+    next = cur->next;
+    cur->next = pre;
     pre = cur;
     cur = next;
   }
   // pre -> next = NULL; // 最后的节点无后继
-  head ->next = pre;
+  head->next = pre;
 }
 
 /**
@@ -128,9 +123,7 @@ void reverse(linked_list *head){
  * @param  head 头结点位置
  * @return      空为 1, 否则为 0.
  */
-int is_empty(linked_list* head){
-  return (head->next)? 0:1;
-}
+int is_empty(linked_list *head) { return (head->next == NULL); }
 
 /**
  * 按值查找
@@ -138,11 +131,9 @@ int is_empty(linked_list* head){
  * @param  data 要查找的数据
  * @return      找到的节点
  */
-linked_list* search(linked_list* loc,type data){
+linked_list *search(linked_list *loc, type data) {
   while (loc->data != data) {
-    if((loc = loc -> next)==NULL){
-      return NULL;
-    };
+    if ((loc = loc->next) == NULL) { return NULL; };
   }
   return loc;
 }
@@ -157,7 +148,7 @@ int main(int argc, char const *argv[]) {
 
   // 测试查找函数
   linked_list *find = iloc(head, 1);
-  printf("\nfind head[1]\n");
+  printf("\nFind head[1]\n");
   printf("%c\n", find->data);
 
   // 测试表长
@@ -165,11 +156,10 @@ int main(int argc, char const *argv[]) {
 
   // 测试查找
   char to_search = 'a';
-  printf("%c\n", search(head,to_search)->data);
-
+  printf("%c\n", search(head, to_search)->data);
 
   // 测试插入函数
-  insert(head,'5');
+  insert(head, '5');
   printf("\nAfter insert:\n");
   print(head);
 
@@ -185,9 +175,7 @@ int main(int argc, char const *argv[]) {
 
   // 测试空链表
   linked_list *empty = init();
-  if (is_empty(empty)) {
-    printf("\ninit a empty list\n");
-  }
+  if (is_empty(empty)) { printf("\nInit a empty list\n"); }
 
   return 0;
 }
