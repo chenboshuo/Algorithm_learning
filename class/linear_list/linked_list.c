@@ -22,7 +22,7 @@ linked_list *init() {
 }
 
 /**
- * 创建列表(仅限于char),输入"$"停止
+ * 创建链表(仅限于char),输入"$"停止
  * @param  head 头指针
  * @return      尾部指针
  */
