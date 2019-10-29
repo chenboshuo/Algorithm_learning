@@ -57,6 +57,10 @@ void _pre_order_print_r(binary_tree *node, int indent) {
   }
   printf("|-%c\n", node->value);
 
+  if (!node->left && !node->left) { // 跳过没有孩子的节点
+    return; 
+  }
+
   // 递归的打印左右子树
   _pre_order_print_r(node->left, indent + 1);
   _pre_order_print_r(node->right, indent + 1);
@@ -78,7 +82,7 @@ void in_order_print(binary_tree *node) {
     return;
   }
 
-  // 递归的打印左子树
+  // 递归地打印左子树
   printf("| ");
   in_order_print(node->left);
 
@@ -164,3 +168,23 @@ int main(int argc, char const *argv[]) {
 
   return 0;
 }
+
+/* output
+
+  Preorder traversal:
+  |-A
+  Test the tree using expression "A(B(,E),C(F,))".
+  |-A
+  | |-B
+  | |-C
+  | | |-F
+  | | |-
+  Test the tree using expression "A(B(,E),C(F(G(,H),),))".
+  |-A
+  | |-B
+  | |-C
+  | | |-F
+  | | | |-G
+  | | | |-
+  | | |-
+*/
