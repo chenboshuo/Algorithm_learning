@@ -57,7 +57,7 @@ void _pre_order_print_r(binary_tree *node, int indent) {
   }
   printf("|-%c\n", node->value);
 
-  if (!node->left && !node->left) { // 跳过没有孩子的节点
+  if (!node->left && !node->right) { // 跳过没有孩子的节点
     return; 
   }
 
