@@ -1,6 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h> 
 
-enum thread { FALSE, TRUE };
+enum thread { LINK, THREAD };
 
 typedef char type;
 typedef struct node {
@@ -22,8 +23,8 @@ binary_tree *pre = NULL;
  */
 binary_tree* init(type* value){
   binary_tree* root = (binary_tree*)malloc(sizeof(binary_tree));
-  root->left_thread = FALSE;
-  root->right_thread = FALSE;
+  root->left_thread = LINK;
+  root->right_thread = LINK;
   root->left = NULL;
   root->right = NULL;
   if (value) { root->value = *value; }
@@ -40,8 +41,8 @@ void cue(binary_tree *node){
 
   cue(node->left);
 
-  if (!node->left) { node->left_thread = TRUE; }
-  if (!node->right) { node->right_thread = TRUE; }
+  if (!node->left) { node->left_thread = THREAD; }
+  if (!node->right) { node->right_thread = THREAD; }
 
   if (node->left_thread) { node->right = pre; }
   if (pre && pre->right_thread) { pre->right = node; }
@@ -55,7 +56,7 @@ void cue(binary_tree *node){
  * @param  node 节点地址
  * @return      下一个节点地址
  */
-binary_tree *__next__(binary_tree * node){
+binary_tree *next(binary_tree * node){
   binary_tree *q;
   if (!node) {
     printf("error");
@@ -84,7 +85,7 @@ void print_threaded(binary_tree *node){
     }
     while(p){
       printf("%c", p->value);
-      p = __next__(p);
+      p = next(p);
     }
   }
 }
