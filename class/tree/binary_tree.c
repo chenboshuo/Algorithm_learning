@@ -77,21 +77,34 @@ void pre_order_print(binary_tree *node) { _pre_order_print_r(node, 0); }
  * @param node 起始打印节点
  */
 void in_order_print(binary_tree *node) {
-  if (!node) {
-    printf("|- \n");
-    return;
+  binary_tree *path[NODESIZE];
+  int pp = 0; // 指向path的指针
+  while(node){
+    // 有左子树,入栈,进入左子树
+    while(node -> left){ 
+      path[pp++] = node;
+      node = node->left;
+    }
+    
+    // 无左子树,打印
+    printf("%c ", node->value);
+
+    // 有右子树,进入,continue
+    if(node -> right) {
+      node = node -> right ;
+      continue;
+    }
+
+    // 无右子树, 退栈
+    while(!node -> right && pp > 0){
+      // 退栈
+      node = path[--pp];
+      // 打印元素
+      printf("%c ", node->value);
+    }
+
+    node = node->right;
   }
-
-  // 递归地打印左子树
-  printf("| ");
-  in_order_print(node->left);
-
-  // 打印当前节点
-  printf("|-%c\n", node->value);
-
-  // 打印右子树
-  printf("| ");
-  in_order_print(node->right);
 }
 
 /**
@@ -151,21 +164,39 @@ int main(int argc, char const *argv[]) {
   printf("Preorder traversal:\n");
   pre_order_print(test);
 
-  // printf("In oreder traversal:\n");
-  // in_order_print(test);
+  printf("In oreder traversal:\n");
+  in_order_print(test);
 
   // 测试表达式建立二叉树
-  char *exp = "A(B(,E),C(F,))";
-  printf("Test the tree using expression \"%s\".\n", exp);
+  char *exp = "A(\n  B(\n    ,E\n  ),\n  C(F,)\n)";
+  printf("\nTest the tree using expression \"\n%s\".\n", exp);
   binary_tree *test2 = create_tree(exp);
   pre_order_print(test2);
 
-  // 表达式 case 2
-  char *exp2 = "A(B(,E),C(F(G(,H),),))";
-  printf("Test the tree using expression \"%s\".\n", exp2);
-  binary_tree *test3 = create_tree(exp2);
+  printf("In order traversal:\n");
+  in_order_print(test2);
+
+  // 表达式 
+  /*
+    A(
+      B(,E),
+      C(
+        F(
+          G(,H),
+        ),
+      )
+    )
+  */
+  char *exp3 = "A(B(,E),C(F(G(,H),),))";
+  printf("\nTest the tree using expression \"\n%s\".\n", exp3);
+  binary_tree *test3 = create_tree(exp3);
   pre_order_print(test3);
 
+  printf("In order traversal:\n");
+  in_order_print(test3);
+  
+  // printf("In order traversal:\n");
+  // in_order_print(test3);
   return 0;
 }
 
