@@ -23,19 +23,34 @@ binary_tree *init(type *value) {
   return root;
 }
 
-// binary_tree *str2tree(char* str){
-//   int rear = 1;
-//   int front = 0;
-//   binary_tree *root = init(str);
-//   binary_tree *node = root;
-//   binary_tree *left_child, *right_child;
-//   binary_tree (*location)[NODESIZE];
-//   while (str[rear] != '\0') {
 
-//     left_child = init(str + rear);
-//     node
-//     }
-// }
+/**
+ * 字符串转化为二叉树,
+ * 约定 "_" 代表空节点
+ * @param  str 节点
+ * @return     根节点
+ */
+binary_tree *str_to_tree(char* str){
+  binary_tree *loc[NODESIZE]; // 存储生成节点地址
+  int front = 0, rear = 1;
+
+  // 处理根节点
+  binary_tree *root = init(str++);
+  loc[0] = root;
+
+  for (; *str; ++str) {
+    loc[rear] = (*str != EMPTY) ? init(str) : NULL;
+
+    // 链接节点
+    if(rear & 1) { // rear 为奇数, 则该节点为左节点
+      loc[front]->left = loc[rear++];
+    }else{
+      loc[front++]->right = loc[rear++];
+    }
+  }
+
+  return root;
+}
 
 /**
  * (内部函数) 递归先序打印二叉树
@@ -197,6 +212,14 @@ int main(int argc, char const *argv[]) {
   
   // printf("In order traversal:\n");
   // in_order_print(test3);
+
+  // 测试字符串转化
+  char *str4 = "ABC_DE";
+  binary_tree *test4 = str_to_tree(str4);
+  printf("Test to create tree by string('_' symbolize the NULL node): %s\n",
+         str4);
+  pre_order_print(test4);
+
   return 0;
 }
 
