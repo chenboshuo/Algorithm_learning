@@ -1,19 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h> 
-
-enum thread { LINK, THREAD };
+#include <stdbool.h> 
 
 typedef char type;
 typedef struct node {
   type value;
   struct node *left;
-  enum thread left_thread; // 左边是否为线索
+  bool left_thread; // 左边是否为线索
   struct node *right;
-  enum thread right_thread; // 左边是否为线索
+  bool right_thread; // 右边是否为线索
 
 } binary_tree;
 
-binary_tree *pre = NULL;
 
 
 /**
@@ -23,8 +21,8 @@ binary_tree *pre = NULL;
  */
 binary_tree* init(type* value){
   binary_tree* root = (binary_tree*)malloc(sizeof(binary_tree));
-  root->left_thread = LINK;
-  root->right_thread = LINK;
+  root->left_thread = false; // 初始状态无左右线索
+  root->right_thread = false;
   root->left = NULL;
   root->right = NULL;
   if (value) { root->value = *value; }
@@ -32,21 +30,33 @@ binary_tree* init(type* value){
 }
 
 /**
- * 线索化二叉树
+ * 中序线索化二叉树
  * @param node 节点地址
  */
+binary_tree *pre = NULL;
 void cue(binary_tree *node){
   if (node == NULL) { return; }
 
-
+  // 递归调用建立左子树索引
   cue(node->left);
 
-  if (!node->left) { node->left_thread = THREAD; }
-  if (!node->right) { node->right_thread = THREAD; }
+  if (!node->left) { // 没有左孩子, 将左指针作为线索
+    node->left_thread = true; 
+  }
+  if (!node->right) { // 没有右孩子, 将右指针作为线索
+    node->right_thread = true; 
+  }
 
-  if (node->left_thread) { node->right = pre; }
-  if (pre && pre->right_thread) { pre->right = node; }
+  // 寻找线索节点
+  if (node->left_thread) { // 将左线索指向pre节点
+    node->left = pre; 
+    pre = node; // 移动pre指针到当前位置
+  }
+  if (pre && pre->right_thread) { // 将pre节点的右线索指向当前节点
+    pre->right = node; 
+  }
 
+  // 递归调用建立右子树索引
   cue(node->right);
 
 }
@@ -57,7 +67,6 @@ void cue(binary_tree *node){
  * @return      下一个节点地址
  */
 binary_tree *next(binary_tree * node){
-  binary_tree *q;
   if (!node) {
     printf("error");
     return NULL;
@@ -65,11 +74,11 @@ binary_tree *next(binary_tree * node){
   if (node->right_thread) {
     return node->right;
   }
-    q = node-> right;
-    while (!q->left_thread) {
-      q = q->left;
+    node = node-> right;
+    while (!node->left_thread) {
+      node = node->left;
     }
-    return q;
+    return node;
 }
 
 
@@ -89,3 +98,4 @@ void print_threaded(binary_tree *node){
     }
   }
 }
+
