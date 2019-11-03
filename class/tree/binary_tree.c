@@ -73,7 +73,7 @@ void _pre_order_print_r(binary_tree *node, int indent) {
   printf("|-%c\n", node->value);
 
   if (!node->left && !node->right) { // 跳过没有孩子的节点
-    return; 
+    return;
   }
 
   // 递归的打印左右子树
@@ -96,11 +96,11 @@ void in_order_print(binary_tree *node) {
   int pp = 0; // 指向path的指针
   while(node){
     // 有左子树,入栈,进入左子树
-    while(node -> left){ 
+    while(node -> left){
       path[pp++] = node;
       node = node->left;
     }
-    
+
     // 无左子树,打印
     printf("%c ", node->value);
 
@@ -120,6 +120,7 @@ void in_order_print(binary_tree *node) {
 
     node = node->right;
   }
+  printf("\n");
 }
 
 /**
@@ -184,14 +185,14 @@ int main(int argc, char const *argv[]) {
 
   // 测试表达式建立二叉树
   char *exp = "A(\n  B(\n    ,E\n  ),\n  C(F,)\n)";
-  printf("\nTest the tree using expression \"\n%s\".\n", exp);
+  printf("\nTest to create a binary tree using expression \"\n%s\".\n", exp);
   binary_tree *test2 = create_tree(exp);
   pre_order_print(test2);
 
   printf("In order traversal:\n");
   in_order_print(test2);
 
-  // 表达式 
+  // 表达式
   /*
     A(
       B(,E),
@@ -203,13 +204,13 @@ int main(int argc, char const *argv[]) {
     )
   */
   char *exp3 = "A(B(,E),C(F(G(,H),),))";
-  printf("\nTest the tree using expression \"\n%s\".\n", exp3);
+  printf("\nTest to create a binary using expression \"\n%s\".\n", exp3);
   binary_tree *test3 = create_tree(exp3);
   pre_order_print(test3);
 
   printf("In order traversal:\n");
   in_order_print(test3);
-  
+
   // printf("In order traversal:\n");
   // in_order_print(test3);
 
