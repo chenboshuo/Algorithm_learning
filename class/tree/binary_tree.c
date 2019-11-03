@@ -11,7 +11,6 @@ typedef struct node {
   struct node *right;
 } binary_tree;
 
-enum child { LEFT, RIGHT };
 
 binary_tree *init(type *value) {
   binary_tree *root = (binary_tree *)malloc(sizeof(binary_tree));
@@ -131,6 +130,7 @@ void in_order_print(binary_tree *node) {
  * @return            根节点
  */
 binary_tree *create_tree(char *expression) {
+  enum child { LEFT, RIGHT };
   binary_tree *loc[NODESIZE];  // 记录节点的地址
   int ptr_loc = 0;
   binary_tree *node[2];    // 存储左右子树
