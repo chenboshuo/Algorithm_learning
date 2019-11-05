@@ -221,6 +221,16 @@ int main(int argc, char const *argv[]) {
          str4);
   pre_order_print(test4);
 
+  // 只有根节点的特殊情况
+  char *exp5 = "A";
+  printf("\nTest to create a binary using expression \"\n%s\".\n", exp5);
+  binary_tree *test5 = create_tree(exp5);
+  pre_order_print(test5);
+
+  printf("In order traversal:\n");
+  in_order_print(test5);
+
+
   return 0;
 }
 
