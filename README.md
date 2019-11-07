@@ -3,6 +3,8 @@
 
 [![HitCount](http://hits.dwyl.io/chenboshuo/chenboshuo/learn_algorithm.svg)](http://hits.dwyl.io/chenboshuo/chenboshuo/learn_algorithm)
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c41c45a3de1e418cb31b87f1e73352d1)](https://www.codacy.com/manual/chenboshuo/learn_algorithm?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chenboshuo/learn_algorithm&amp;utm_campaign=Badge_Grade)
+
 > [数据结构与算法上课内容](./class)
 >
 >> [线性表](./class/linear_list)
@@ -26,3 +28,10 @@
 >> [迷宫问题(蓝桥杯2019 省赛B类E题)](https://github.com/chenboshuo/programming_practice/tree/master/lanqiaobei/provincial_level/2019B)
 >>
 >>> [代码](https://github.com/chenboshuo/programming_practice/blob/master/lanqiaobei/provincial_level/2019B/E_maze.c)
+>>
+>> [树](./class/tree)
+>>> [binary_tree.c 链表实现二叉树](./class/tree/binary_tree.c)
+>>>
+>>> [线索化二叉树](./class/tree/threaded_binary_tree.c)
+>>>
+>>> [Huffman 树](./class/tree/Huffman_tree.c)
