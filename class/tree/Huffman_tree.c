@@ -6,7 +6,7 @@
 #define MAXNODE MAXLEAF * 2 - 1  // 最多节点
 #define EMPTY '_' // 存贮没有对应字母的单词
 #define CODE_MAX 100  // 编码的最大长度
-#define BIT_MAX 9 // 存储单个字母的最大编码长度
+#define BIT_MAX 10 // 存储单个字母的最大编码长度
 
 // Huffman tree definition
 typedef struct node {
@@ -161,8 +161,26 @@ void print_dict(Dict *d, int length){
   }
 }
 
+char *code(char* string, Dict* dict, size_t dict_size){
+  char *cipher = (char*)malloc(sizeof(char) * CODE_MAX);
+  int index = 0;
+  while (*string) {
+    // 在字典中检索
+    for (size_t i = 0; i < dict_size; ++i){
+      if(*string == dict[i].word) {  
+        printf("%c", dict[i].word);
+        for (size_t j = dict[i].start; j < BIT_MAX; ++j) {  // 延长字符串 
+          cipher[index++] = dict[i].bits[j]; 
+        }
+      }
+    }
+    ++string;
+  }
+  cipher[index] = '\0';
+  return cipher;
+}
+
 int main(int argc, char const *argv[]) {
-  // 对HuffmanTree的创建的测试
   // Case 1
   int w1[2] = {2, 3};
   char* worlds_1 = "ab";
@@ -170,9 +188,11 @@ int main(int argc, char const *argv[]) {
   printf("\nCase 1\n");
   print(test1);
   Dict *d1 = create_dict(test1, 2);
-
   printf("\n");
   print_dict(d1, 2);
+  char *test_txt1 = "abb";
+  char *code_1 = code(test_txt1, d1, 2);
+  printf("\n the code of \"%s\":\n %s", test_txt1, code_1);
 
   // // Case 2 不符合实际,去除测试,约定编码数>1
   // int w2[1] = {1};
@@ -185,31 +205,40 @@ int main(int argc, char const *argv[]) {
   printf("\nCase 3\n");
   print(test3);
   Dict *d3 = create_dict(test3, 3);
-  // for (size_t node_index = 0; node_index < 3; ++node_index){
-  //   printf("%c\n", test3[node_index].value);
-  // }  // debug
   printf("\n");
   print_dict(d3, 3);
+  char *test_txt3 = "pAss";
+  char *code_3 = code(test_txt3, d3, 3);
+  printf("\n the code of \"%s\":\n %s", test_txt3, code_3);
+
 
   // Case 4
   int w4[4] = {2,5,8,6};
-  char *worlds_4 = "tfes";
+  char *worlds_4 = "rfes";
   HuffmanTree *test4 = createHuffmanTree(worlds_4, w4, 4);
   printf("\nCase 4\n");
   print(test4);
   Dict *d4 = create_dict(test4, 4);
   printf("\n");
   print_dict(d4, 4);
+  char *test_txt4 = "frees";
+  char *code_4 = code(test_txt4, d4, 4);
+  printf("\n the code of \"%s\":\n %s", test_txt4, code_4);
+
 
   // Case 5
   int w5[9] = {2,5,3,6,8,1,4,8,9};
-  char *worlds_5 = "abcdefghi";
+  char *worlds_5 = "abcdefght";
   HuffmanTree *test5 = createHuffmanTree(worlds_5, w5, 9);
   printf("\nCase 5\n");
   print(test5);
   Dict *d5 = create_dict(test5, 9);
   printf("\n");
   print_dict(d5, 9);
+  char *test_txt5 = "database";
+  char *code_5 = code(test_txt5, d5, 9);
+  printf("\n the code of \"%s\":\n %s", test_txt5, code_5);
+
 
   return 0;
 }
