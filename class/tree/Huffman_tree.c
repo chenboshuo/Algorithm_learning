@@ -4,9 +4,9 @@
 
 #define MAXLEAF 20               // 最多叶节点的值
 #define MAXNODE MAXLEAF * 2 - 1  // 最多节点
-#define EMPTY '_' // 存贮没有对应字母的单词
-#define CODE_MAX 100  // 编码的最大长度
-#define BIT_MAX 10 // 存储单个字母的最大编码长度
+#define EMPTY '_'                // 存贮没有对应字母的单词
+#define CODE_MAX 100             // 编码的最大长度
+#define BIT_MAX 10               // 存储单个字母的最大编码长度
 
 // Huffman tree definition
 typedef struct node {
@@ -19,7 +19,7 @@ typedef struct node {
 
 // 字典的定义
 // 字典存储了字母与对应 Huffman code
-typedef struct{
+typedef struct {
   char word;
   char bits[BIT_MAX + 1];
   int start;
@@ -32,7 +32,7 @@ typedef struct{
  * @param  length 字符(权) 数组的长度
  * @return        哈夫曼树
  */
-HuffmanTree *createHuffmanTree(char* words, int *weight, size_t length) {
+HuffmanTree *createHuffmanTree(char *words, int *weight, size_t length) {
   // 初始化节点
   HuffmanTree *node =
       (HuffmanTree *)malloc(sizeof(HuffmanTree) * (2 * length - 1));
@@ -68,13 +68,13 @@ HuffmanTree *createHuffmanTree(char* words, int *weight, size_t length) {
         min2_index = i;
       }
     }
-      // 创建两个最小节点的 parent node
-      node[min1_index].parent = parent_index;
-      node[min2_index].parent = parent_index;
-      node[parent_index].weight =
-          node[min1_index].weight + node[min2_index].weight;
-      node[parent_index].left = min1_index;
-      node[parent_index].right = min2_index;
+    // 创建两个最小节点的 parent node
+    node[min1_index].parent = parent_index;
+    node[min2_index].parent = parent_index;
+    node[parent_index].weight =
+        node[min1_index].weight + node[min2_index].weight;
+    node[parent_index].left = min1_index;
+    node[parent_index].right = min2_index;
   }
   return node;
 }
@@ -85,11 +85,11 @@ HuffmanTree *createHuffmanTree(char* words, int *weight, size_t length) {
  * @param index 节点的索引
  * @param depth 节点在树中对应深度
  */
-void _print(HuffmanTree *node, size_t index, int depth) {
+static void _print(HuffmanTree *node, size_t index, int depth) {
   for (size_t i = 0; i < depth; ++i) {
     printf("|  ");
   }
-  printf("|- %c (%d)\n", node[index].value ,node[index].weight);
+  printf("|- %c (%d)\n", node[index].value, node[index].weight);
 
   if (node[index].left != -1) {
     _print(node, node[index].left, depth + 1);
@@ -99,20 +99,18 @@ void _print(HuffmanTree *node, size_t index, int depth) {
   }
 }
 
-
 /**
  * 寻找哈夫曼树的根节点
  * @param  node 指向哈夫曼树节点的指针
  * @return      哈夫曼树根节点下标
  */
-size_t find_root(HuffmanTree* node){
+size_t find_root(HuffmanTree *node) {
   size_t root_index = 0;
   while (node[root_index].parent != -1) {
     root_index = node[root_index].parent;
   }
   return root_index;
 }
-
 
 /**
  * 打印 Huffman 树
@@ -130,7 +128,7 @@ void print(HuffmanTree *node) {
  * @param  length 字典数组的长度
  * @return        字典数组的指针
  */
-Dict* create_dict(HuffmanTree* tree, int length){
+Dict *create_dict(HuffmanTree *tree, int length) {
   // 初始化字典
   Dict *dict = (Dict *)malloc(sizeof(Dict) * length);
   for (size_t i = 0; i < length; ++i) {
@@ -140,18 +138,17 @@ Dict* create_dict(HuffmanTree* tree, int length){
 
   // 处理节点
   for (size_t node_index = 0; node_index < length; node_index++) {
-
     // 为字典插入字母
     dict[node_index].word = tree[node_index].value;
     int parent_index = tree[node_index].parent;  // parent 表示节点的parent
     int child_index = node_index;  // 相对的child节点的下标
 
-
     //  判断 叶子是parent的左或右子树
-    while(parent_index != -1){
-      if(tree[parent_index].left == child_index) { // parent 的left 是当前节点的下标
+    while (parent_index != -1) {
+      if (tree[parent_index].left ==
+          child_index) {  // parent 的left 是当前节点的下标
         dict[node_index].bits[--(dict[node_index].start)] = '0';
-      }else{
+      } else {
         dict[node_index].bits[--(dict[node_index].start)] = '1';
       }
       child_index = parent_index;
@@ -166,8 +163,8 @@ Dict* create_dict(HuffmanTree* tree, int length){
  * @param d      字典
  * @param length 字典数组的长度
  */
-void print_dict(Dict *d, int length){
-  for (size_t i = 0; i < length; ++i){
+void print_dict(Dict *d, int length) {
+  for (size_t i = 0; i < length; ++i) {
     printf("%c - %s\n", d[i].word, d[i].bits + d[i].start);
   }
 }
@@ -179,13 +176,13 @@ void print_dict(Dict *d, int length){
  * @param  dict_size 字典的大小
  * @return           指向 Huffman 编码后的字符串
  */
-char *code(char* string, Dict* dict, size_t dict_size){
-  char *cipher = (char*)malloc(sizeof(char) * CODE_MAX);
+char *code(char *string, Dict *dict, size_t dict_size) {
+  char *cipher = (char *)malloc(sizeof(char) * CODE_MAX);
   int index = 0;
   while (*string) {
     // 在字典中检索
-    for (size_t i = 0; i < dict_size; ++i){
-      if(*string == dict[i].word) {
+    for (size_t i = 0; i < dict_size; ++i) {
+      if (*string == dict[i].word) {
         printf("%c", dict[i].word);
         for (size_t j = dict[i].start; j < BIT_MAX; ++j) {  // 延长字符串
           cipher[index++] = dict[i].bits[j];
@@ -204,25 +201,25 @@ char *code(char* string, Dict* dict, size_t dict_size){
  * @param  tree 密码对应的哈夫曼树
  * @return      明文
  */
-char *decode(char *code, HuffmanTree *tree){
+char *decode(char *code, HuffmanTree *tree) {
   char *text = (char *)malloc(sizeof(char) * CODE_MAX);
   size_t root_index = find_root(tree);
   size_t loc = root_index;
   size_t index = 0;
   for (; *code; ++code) {
-    if(*code == '0') {
+    if (*code == '0') {
       loc = tree[loc].left;
-      if(tree[loc].left == -1) {
+      if (tree[loc].left == -1) {
         text[index++] = tree[loc].value;
         loc = root_index;
       }
-    }else if(*code == '1'){
+    } else if (*code == '1') {
       loc = tree[loc].right;
-      if(tree[loc].right == -1) {
+      if (tree[loc].right == -1) {
         text[index++] = tree[loc].value;
         loc = root_index;
       }
-    }else{
+    } else {
       return "error, invalid character";
     }
   }
@@ -233,7 +230,7 @@ char *decode(char *code, HuffmanTree *tree){
 int main(int argc, char const *argv[]) {
   // Case 1
   int w1[2] = {2, 3};
-  char* worlds_1 = "ab";
+  char *worlds_1 = "ab";
   HuffmanTree *test1 = createHuffmanTree(worlds_1, w1, 2);
   printf("\nCase 1\n");
   print(test1);
@@ -250,7 +247,7 @@ int main(int argc, char const *argv[]) {
   // char *worlds_2 = "a";
 
   // Case 3
-  int w3[3] = {9,9,6};
+  int w3[3] = {9, 9, 6};
   char *worlds_3 = "Asp";
   HuffmanTree *test3 = createHuffmanTree(worlds_3, w3, 3);
   printf("\nCase 3\n");
@@ -263,9 +260,8 @@ int main(int argc, char const *argv[]) {
   printf("\n the code of \"%s\":\n %s", test_txt3, code_3);
   printf("\ndecode it:\n%s\n", decode(code_3, test3));
 
-
   // Case 4
-  int w4[4] = {2,5,8,6};
+  int w4[4] = {2, 5, 8, 6};
   char *worlds_4 = "rfes";
   HuffmanTree *test4 = createHuffmanTree(worlds_4, w4, 4);
   printf("\nCase 4\n");
@@ -278,9 +274,8 @@ int main(int argc, char const *argv[]) {
   printf("\n the code of \"%s\":\n %s", test_txt4, code_4);
   printf("\ndecode it:\n%s\n", decode(code_4, test4));
 
-
   // Case 5
-  int w5[9] = {2,5,3,6,8,1,4,8,9};
+  int w5[9] = {2, 5, 3, 6, 8, 1, 4, 8, 9};
   char *worlds_5 = "abcdefght";
   HuffmanTree *test5 = createHuffmanTree(worlds_5, w5, 9);
   printf("\nCase 5\n");
