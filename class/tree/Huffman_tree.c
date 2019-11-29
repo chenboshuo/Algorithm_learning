@@ -99,17 +99,28 @@ void _print(HuffmanTree *node, size_t index, int depth) {
   }
 }
 
+
+/**
+ * 寻找哈夫曼树的根节点
+ * @param  node 指向哈夫曼树节点的指针
+ * @return      哈夫曼树根节点下标
+ */
+size_t find_root(HuffmanTree* node){
+  size_t root_index = 0;
+  while (node[root_index].parent != -1) {
+    root_index = node[root_index].parent;
+  }
+  return root_index;
+}
+
+
 /**
  * 打印 Huffman 树
  * @param node 用来存放 Huffman 树地址的数组
  */
 void print(HuffmanTree *node) {
   // 寻找根节点
-  size_t root_index = 0;
-  while (node[root_index].parent != -1) {
-    root_index = node[root_index].parent;
-  }
-  _print(node, root_index, 0);
+  _print(node, find_root(node), 0);
 }
 
 /**
@@ -161,16 +172,23 @@ void print_dict(Dict *d, int length){
   }
 }
 
+/**
+ * 哈夫曼树的编码
+ * @param  string    要编码的字符串
+ * @param  dict      不同字符对应的编码
+ * @param  dict_size 字典的大小
+ * @return           指向 Huffman 编码后的字符串
+ */
 char *code(char* string, Dict* dict, size_t dict_size){
   char *cipher = (char*)malloc(sizeof(char) * CODE_MAX);
   int index = 0;
   while (*string) {
     // 在字典中检索
     for (size_t i = 0; i < dict_size; ++i){
-      if(*string == dict[i].word) {  
+      if(*string == dict[i].word) {
         printf("%c", dict[i].word);
-        for (size_t j = dict[i].start; j < BIT_MAX; ++j) {  // 延长字符串 
-          cipher[index++] = dict[i].bits[j]; 
+        for (size_t j = dict[i].start; j < BIT_MAX; ++j) {  // 延长字符串
+          cipher[index++] = dict[i].bits[j];
         }
       }
     }
@@ -178,6 +196,38 @@ char *code(char* string, Dict* dict, size_t dict_size){
   }
   cipher[index] = '\0';
   return cipher;
+}
+
+/**
+ * 解码函数
+ * @param  code 密码
+ * @param  tree 密码对应的哈夫曼树
+ * @return      明文
+ */
+char *decode(char *code, HuffmanTree *tree){
+  char *text = (char *)malloc(sizeof(char) * CODE_MAX);
+  size_t root_index = find_root(tree);
+  size_t loc = root_index;
+  size_t index = 0;
+  for (; *code; ++code) {
+    if(*code == '0') {
+      loc = tree[loc].left;
+      if(tree[loc].left == -1) {
+        text[index++] = tree[loc].value;
+        loc = root_index;
+      }
+    }else if(*code == '1'){
+      loc = tree[loc].right;
+      if(tree[loc].right == -1) {
+        text[index++] = tree[loc].value;
+        loc = root_index;
+      }
+    }else{
+      return "error, invalid character";
+    }
+  }
+  // text[index] = '\0';
+  return text;
 }
 
 int main(int argc, char const *argv[]) {
@@ -190,9 +240,10 @@ int main(int argc, char const *argv[]) {
   Dict *d1 = create_dict(test1, 2);
   printf("\n");
   print_dict(d1, 2);
-  char *test_txt1 = "abb";
+  char *test_txt1 = "bab";
   char *code_1 = code(test_txt1, d1, 2);
-  printf("\n the code of \"%s\":\n %s", test_txt1, code_1);
+  printf("\nthe code of \"%s\":\n%s\n", test_txt1, code_1);
+  printf("\ndecode it:\n%s\n", decode(code_1, test1));
 
   // // Case 2 不符合实际,去除测试,约定编码数>1
   // int w2[1] = {1};
@@ -210,6 +261,7 @@ int main(int argc, char const *argv[]) {
   char *test_txt3 = "pAss";
   char *code_3 = code(test_txt3, d3, 3);
   printf("\n the code of \"%s\":\n %s", test_txt3, code_3);
+  printf("\ndecode it:\n%s\n", decode(code_3, test3));
 
 
   // Case 4
@@ -224,6 +276,7 @@ int main(int argc, char const *argv[]) {
   char *test_txt4 = "frees";
   char *code_4 = code(test_txt4, d4, 4);
   printf("\n the code of \"%s\":\n %s", test_txt4, code_4);
+  printf("\ndecode it:\n%s\n", decode(code_4, test4));
 
 
   // Case 5
@@ -238,7 +291,7 @@ int main(int argc, char const *argv[]) {
   char *test_txt5 = "database";
   char *code_5 = code(test_txt5, d5, 9);
   printf("\n the code of \"%s\":\n %s", test_txt5, code_5);
-
+  printf("\ndecode it:\n%s\n", decode(code_5, test5));
 
   return 0;
 }
