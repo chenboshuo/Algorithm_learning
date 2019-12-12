@@ -93,29 +93,16 @@ void pre_order_print(binary_tree *node) { _pre_order_print_r(node, 0); }
 void in_order_print(binary_tree *node) {
   binary_tree *path[NODESIZE];
   int pp = 0; // 指向path的指针
-  while(node){
+  while(node || pp > 0){
     // 有左子树,入栈,进入左子树
-    while(node -> left){
+    while(node){
       path[pp++] = node;
       node = node->left;
     }
 
     // 无左子树,打印
+    node = path[--pp];
     printf("%c ", node->value);
-
-    // 有右子树,进入,continue
-    if(node -> right) {
-      node = node -> right ;
-      continue;
-    }
-
-    // 无右子树, 退栈
-    while(!node -> right && pp > 0){
-      // 退栈
-      node = path[--pp];
-      // 打印元素
-      printf("%c ", node->value);
-    }
 
     node = node->right;
   }
@@ -220,6 +207,8 @@ int main(int argc, char const *argv[]) {
   printf("Test to create tree by string('_' symbolize the NULL node): %s\n",
          str4);
   pre_order_print(test4);
+  printf("In order traversal:\n");
+  in_order_print(test4);
 
   // 只有根节点的特殊情况
   char *exp5 = "A";
@@ -230,6 +219,9 @@ int main(int argc, char const *argv[]) {
   printf("In order traversal:\n");
   in_order_print(test5);
 
+  // 无根节点的特殊情况
+  printf("In order traversal of NULL:\n");
+  in_order_print(NULL);
 
   return 0;
 }
