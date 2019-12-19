@@ -78,7 +78,7 @@ void delete_next(linked_list *p) {
 }
 
 /**
- * 按照数值查找节点 /          地址运算(只能向右)
+ * 按照位置查找节点 /          地址运算(只能向右)
  * @param  loc 头结点的位置 /  当前节点位置
  * @param  i   索引(head为0)/  与loc的相对位置
  * @return     要查找的指针地址
