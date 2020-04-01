@@ -23,17 +23,19 @@ class UnionFind():
           @param node_p the node
           @param node_q the other node
         """
-        p_id = self.id[node_p]
-        for i in range(len(self.id)):
-            if self.id[i] == p_id:
-                self.id[i] = self.id[node_q]
+        p_root = self.find(node_p)
+        q_root = self.find(node_q)
+        if p_root != q_root:
+            self.id[p_root] = q_root
 
     def find(self, node_p: int) -> int:
         """find components id
           @param node_p the node
           @return node_p's id
         """
-        return self.id[node_p]
+        while(self.id[node_p] != node_p):
+            node_p = self.id[node_p]
+        return node_p
 
     def has_connected(self, node_p: int, node_q: int) -> bool:
         """ returns true if p and q in the same component
@@ -76,6 +78,6 @@ if __name__ == '__main__':
 
 # ..
 # ----------------------------------------------------------------------
-# Ran 2 tests in 0.035s
+# Ran 2 tests in 0.004s
 
 # OK
