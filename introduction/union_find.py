@@ -11,12 +11,12 @@ class UnionFind():
           @param text the user input
         """
         self.id = list(range(n))
+        self.size = [1]*n  # the size of node i
         self.count = n
         for line in text.strip().split('\n'):
             i, j = map(int, line.split())
             if not self.has_connected(i, j):
                 self.union(i, j)
-                self.count -= 1
 
     def union(self, node_p: int, node_q: int) -> None:
         """ Add connection between p and q
@@ -26,7 +26,14 @@ class UnionFind():
         p_root = self.find(node_p)
         q_root = self.find(node_q)
         if p_root != q_root:
-            self.id[p_root] = q_root
+            # make smaller root pointer to larger one
+            if self.size[p_root] < self.size[q_root]:
+                self.id[p_root] = q_root
+                self.size[q_root] += self.size[p_root]
+            else:
+                self.id[q_root] = p_root
+                self.size[p_root] += self.size[q_root]
+            self.count -= 1
 
     def find(self, node_p: int) -> int:
         """find components id
@@ -70,6 +77,6 @@ if __name__ == '__main__':
 
 # ..
 # ----------------------------------------------------------------------
-# Ran 2 tests in 0.004s
+# Ran 2 tests in 0.002s
 
 # OK
