@@ -50,14 +50,6 @@ class UnionFind():
         return self.count
 
 
-def case(nodes_size: int, text: str) -> int:
-    """return the number of components
-      @param text input
-      @return the components
-    """
-    uf = UnionFind(nodes_size)
-
-
 class TestStringMethods(unittest.TestCase):
 
     def test_tiny(self):
