@@ -8,6 +8,7 @@ class Array:
     def sort(self):
         random.shuffle(self.nums)
         self._quick_sort(0,len(self.nums)-1)
+        # self.quick_3_way(0,len(self.nums)-1)
 
     def _quick_sort(self,left,right):
         """
@@ -40,7 +41,30 @@ class Array:
         self.nums[left], self.nums[j] = self.nums[j], self.nums[left]
         return j
 
+    def quick_3_way(self):
+        return self._quick_3_way(0,len(self.nums)-1)
+
+    def _quick_3_way(self, left, right):
+        if(left >= right):
+            return None
+        lt,i,gt = left,left+1,right
+        while i <= gt:
+            if self.nums[i] < self.nums[left]:
+                self.nums[lt],self.nums[i] = self.nums[i], self.nums[lt]
+                lt += 1
+                i += 1
+            elif self.nums[i] > self.nums[left]:
+                self.nums[gt],self.nums[i] = self.nums[i], self.nums[gt]
+                gt -= 1
+            else:
+                i += 1
+            self._quick_3_way(left, lt-1)
+            self._quick_3_way(gt+1, right)
+
+    def __str__(self):
+        return "".join(test.nums)
 if __name__ == "__main__":
     test = Array(list('qwertyuiopasdfghjklzxcvbnm'))
-    test.sort()
-    print("".join(test.nums))
+    # test.sort()
+    test.quick_3_way()
+    print(test)
