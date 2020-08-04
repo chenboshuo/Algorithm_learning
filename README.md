@@ -5,6 +5,8 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c41c45a3de1e418cb31b87f1e73352d1)](https://www.codacy.com/manual/chenboshuo/learn_algorithm?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chenboshuo/learn_algorithm&amp;utm_campaign=Badge_Grade)
 
+[![time tracker](https://wakatime.com/badge/github/chenboshuo/learn_algorithm.svg)](https://wakatime.com/badge/github/chenboshuo/learn_algorithm)
+
 > [数据结构与算法上课内容](./class)
 >
 >> [线性表](./class/linear_list)
